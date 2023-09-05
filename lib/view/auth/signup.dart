@@ -15,6 +15,13 @@ class _SignupState extends State<Signup> {
   TextEditingController nameController= TextEditingController();
 
   final _formkey= GlobalKey<FormState> ();
+  bool isPasswordvisible= true;
+
+  void toggleVisibility(){
+    setState(() {
+      isPasswordvisible= !isPasswordvisible;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,34 +55,6 @@ class _SignupState extends State<Signup> {
                             color: Color.fromARGB(255, 13, 51, 83),
                             fontSize: 26.0,
                             fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 16.0),
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 8, 43, 72),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            minimumSize: Size.fromHeight(50.0),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Image.asset(
-                                'Asset/googlenew.png',
-                                height: 50.0,
-                                width: 50.0,
-                              ),
-                              const Text(
-                                'Continue with Google',
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                ),
-                              ),
-                              
-                            ],
                           ),
                         ),
                         SizedBox(height: 30.0,),
@@ -141,6 +120,7 @@ class _SignupState extends State<Signup> {
                               ),
                               SizedBox(height: 30.0,),
                               TextFormField(
+                                obscureText: isPasswordvisible,
                                 controller: passwordController,
                                 decoration: InputDecoration(
                                   labelText: 'Password',
@@ -156,6 +136,14 @@ class _SignupState extends State<Signup> {
                                       color: Colors.blue.shade900,
                                     ),
                                   ),
+                                  suffixIcon: IconButton(
+                                    onPressed: (){
+                                      setState(() {
+                                        toggleVisibility();
+                                      });
+                                    }, 
+                                    icon: isPasswordvisible? Icon(Icons.visibility):Icon(Icons.visibility_off),
+                                    )
                                 ),
                                 validator: (value) {
                               if(value!.isEmpty){
@@ -177,7 +165,6 @@ class _SignupState extends State<Signup> {
                                     _formkey.currentState!.validate();
                                     Auth.instance.signup(nameController.text, emailController.text, passwordController.text);
                                   },
-                                  child: Text('REGISTER'),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Color.fromARGB(255, 8, 43, 72),
                                     shape: RoundedRectangleBorder(
@@ -185,8 +172,42 @@ class _SignupState extends State<Signup> {
                                     ),
                                     minimumSize: Size.fromHeight(50.0),
                                   ),
+                                  child: const Text('REGISTER',
+                                  style: TextStyle(
+                                    fontSize: 18.0
+                                  ),),
                                 ),
                               ),  
+                              SizedBox(height: 16.0),
+                              Text('--OR LOGIN WITH --'),
+                              SizedBox(height: 16.0,),
+                          ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color.fromARGB(255, 8, 43, 72),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            minimumSize: Size.fromHeight(50.0),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Image.asset(
+                                'Asset/googlenew.png',
+                                height: 50.0,
+                                width: 50.0,
+                              ),
+                              const Text(
+                                'Continue with Google',
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                ),
+                              ),
+                              
+                            ],
+                          ),
+                        ),
                               SizedBox(height: 30.0,),
                               const Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
