@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notes_app/controllers/firebase_auth.dart';
-import 'package:notes_app/view/auth/login.dart';
+import 'package:notes_app/view/auth/signup.dart';
 import 'package:notes_app/view/home.dart';
 
-class Signup extends StatefulWidget {
-  const Signup({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<Signup> createState() => _SignupState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _SignupState extends State<Signup> {
+class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController= TextEditingController();
   TextEditingController nameController= TextEditingController();
@@ -34,7 +34,7 @@ class _SignupState extends State<Signup> {
             Container(
               height: MediaQuery.of(context).size.height * 0.3,
               width: MediaQuery.of(context).size.width,
-              child: Image.asset('Asset/register1.png'),
+              child: Image.asset('Asset/password_login.png'),
               margin: EdgeInsets.only(top: 12.0),
             ),
             Container(
@@ -52,7 +52,7 @@ class _SignupState extends State<Signup> {
                     child: Column(
                       children: [
                         const Text(
-                          'Create new Account',
+                          'Log in to your Account',
                           style: TextStyle(
                             color: Color.fromARGB(255, 13, 51, 83),
                             fontSize: 26.0,
@@ -93,34 +93,7 @@ class _SignupState extends State<Signup> {
                             return null;
                             },
                               ),
-                              SizedBox(height: 30.0,),
-                              TextFormField(
-                                controller: nameController,
-                                decoration: InputDecoration(
-                                  labelText: 'Name',
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(25.0),
-                                  ),
-                                  fillColor: Colors.grey.shade300,
-                                  filled: true,
-                                  prefixIcon: IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      Icons.person,
-                                      color: Colors.blue.shade900,
-                                    ),
-                                  ),
-                                ),
-                                validator: (value) {
-                              if (value!.isEmpty ||
-                                  !RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
-                                return 'Enter your name';
-                              } else {
-                                return null;
-                              }
-                            }
-                              ),
-                              SizedBox(height: 30.0,),
+                              SizedBox(height: 40.0,),
                               TextFormField(
                                 obscureText: isPasswordvisible,
                                 controller: passwordController,
@@ -159,13 +132,22 @@ class _SignupState extends State<Signup> {
                             return null;
                             },
                               ),
+                              SizedBox(height: 20.0,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  TextButton(
+                                    onPressed: (){}, 
+                                    child: Text('Forgot Password?')),
+                                ],
+                              ),
                               SizedBox(height: 30.0,),
                               Container(
                                 width: double.infinity,
                                 child: ElevatedButton(
                                   onPressed: (){
                                     _formkey.currentState!.validate();
-                                    Auth.instance.signup(nameController.text, emailController.text, passwordController.text);
+                                     Auth.instance.login(emailController.text, passwordController.text);
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Color.fromARGB(255, 8, 43, 72),
@@ -174,7 +156,7 @@ class _SignupState extends State<Signup> {
                                     ),
                                     minimumSize: Size.fromHeight(50.0),
                                   ),
-                                  child: const Text('REGISTER',
+                                  child: const Text('LOGIN',
                                   style: TextStyle(
                                     fontSize: 18.0
                                   ),),
@@ -186,7 +168,7 @@ class _SignupState extends State<Signup> {
                           ElevatedButton(
                           onPressed: () {
                             Auth.instance.signInwithGoogle().then((value) => 
-                            Get.offAll(HomePage()));
+                            Get.off(HomePage()));
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color.fromARGB(255, 8, 43, 72),
@@ -218,7 +200,7 @@ class _SignupState extends State<Signup> {
                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children:[ 
                                  const Text(
-                                    'Already have an account ?',
+                                    'Don\'t  have an account ?',
                                     style: TextStyle(
                                       fontSize: 18.0,
                                       color: Colors.black87
@@ -226,10 +208,10 @@ class _SignupState extends State<Signup> {
                                   ),
                                   TextButton(
                                     onPressed: (){
-                                      Get.off(LoginPage());
+                                      Get.offAll(Signup());
                                     }, 
                                     child:const Text(
-                                      'Login',
+                                      'Sign Up',
                                       style: TextStyle(
                                         fontSize: 18.0,
                                         color: Color.fromARGB(255, 12, 48, 77)
