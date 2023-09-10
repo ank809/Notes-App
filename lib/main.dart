@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notes_app/controllers/firebase_auth.dart';
+import 'package:notes_app/view/add_notes.dart';
 import 'package:notes_app/view/auth/login.dart';
 import 'package:notes_app/view/auth/signup.dart';
 import 'firebase_options.dart';
@@ -17,7 +18,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key}); 
 
   @override
   Widget build(BuildContext context) {
