@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:notes_app/model/users.dart';
+import 'package:notes_app/view/auth/login.dart';
 import 'package:notes_app/view/home.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -72,6 +73,17 @@ class Auth extends GetxController{
       }
     }catch(e){
       Get.snackbar('Error in logging in', e.toString());
+    }
+  }
+
+  void logout() async{
+    try{
+      await FirebaseAuth.instance.signOut().then((value) {
+        Get.snackbar('Successfully logged out', '');
+      Get.offAll(LoginPage());
+    });
+    }catch(e){
+      Get.snackbar('Error in logging out', '');
     }
   }
 }
