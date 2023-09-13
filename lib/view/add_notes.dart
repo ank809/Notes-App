@@ -20,15 +20,15 @@ class _AddNotesState extends State<AddNotes> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor:Color.fromARGB(255, 8, 43, 72),
-         leading: IconButton(
-          onPressed: (){
-            setState(() {
-              Navigator.pop(context);
-            });
-          },
-          icon: const  Icon(Icons.arrow_back,
-          color: Colors.white70,),
-          ),
+        //  leading: IconButton(
+        //   onPressed: (){
+        //     setState(() {
+        //       Navigator.pop(context);
+        //     });
+        //   },
+          // icon: const  Icon(Icons.arrow_back,
+          // color: Colors.white70,),
+          // ),
           actions:  [
           IconButton(
           onPressed: (){
@@ -77,7 +77,7 @@ class _AddNotesState extends State<AddNotes> {
               const SizedBox(height: 20.0,),
                 TextField(
                   controller: _descriptionController,
-                  focusNode: myFocusNode,
+                  // focusNode: myFocusNode,
                   textInputAction: TextInputAction.newline,
                   maxLines: null,
                   style: const TextStyle(
@@ -85,6 +85,7 @@ class _AddNotesState extends State<AddNotes> {
                     color: Colors.white,
                   ),
                   decoration: const InputDecoration(
+                    hintText: 'Type something here...',
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide.none
                     ),
