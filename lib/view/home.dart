@@ -5,7 +5,9 @@ import 'package:notes_app/controllers/notes_controller.dart';
 import 'package:notes_app/view/add_notes.dart';
 import 'package:notes_app/view/edit_screen.dart';
 import 'package:notes_app/view/widget/app_drawer.dart';
+import 'dart:math';
 
+import 'constants.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -14,19 +16,33 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final random = Random();
+  bool val= true;
+  var theme1= const Color.fromARGB(255, 8, 43, 72);
+  var theme2= Colors.black;
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 8, 43, 72),
+      backgroundColor: val? theme1: theme2,
       appBar: AppBar(
-        backgroundColor:const Color.fromARGB(255, 8, 43, 72),
+        backgroundColor:val? theme1:theme2,
         title: const Text('Notes',
         style: TextStyle(
           fontSize: 30.0, ),
           ),
+          actions:<Widget> [
+            Switch(value: val, 
+            onChanged: (t){
+              setState(() {
+                val=t;
+              });
+            }),
+          ],
           ),
       drawer: const AppDrawer(),
-      body: Container(
+      body:Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: StreamBuilder<QuerySnapshot>(
@@ -51,13 +67,15 @@ class _HomePageState extends State<HomePage> {
                 childAspectRatio: 1),
               itemCount: documents.length,
               itemBuilder: (context, index){
+                int len = colors.length;
+                int randVal = random.nextInt(len);
                 final item= documents[index].data() as Map<String, dynamic>;
                 return Container(
                   margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10.0),
                   padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20.0),
-                  color: const Color.fromARGB(255, 171, 169, 169),
+                  color: colors[randVal],
                   ),
                   child: ListTile(
                     onTap: () {
@@ -65,6 +83,7 @@ class _HomePageState extends State<HomePage> {
                         title: item['title'],
                         desc: item['desc'],
                         docID: documents[index].id.toString(),
+                        val: val
                       ));
                     },
                     title: Text(item['title'],
@@ -110,7 +129,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: (){
-            Get.off(AddNotes());
+            Get.to(AddNotes(val: val,));
           },
           child: Icon(Icons.add,
           size: 27.0,),

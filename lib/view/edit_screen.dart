@@ -1,33 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:notes_app/controllers/notes_controller.dart';
+
 
 class Edit_Screen extends StatefulWidget {
   String desc;
   String title;
   String docID;
-   Edit_Screen({super.key, required this.title, required this.desc, required this.docID});
+  final bool val;
+   Edit_Screen({super.key, required this.title, required this.desc, required this.docID, required this.val});
 
   @override
   State<Edit_Screen> createState() => _Edit_ScreenState();
 }
 
 class _Edit_ScreenState extends State<Edit_Screen> {
-  TextEditingController _titleController= new TextEditingController();
-  TextEditingController _descriptionController= new TextEditingController();
-  FocusNode myFocusNode = FocusNode();
+  final TextEditingController _titleController=  TextEditingController();
+  final TextEditingController _descriptionController= TextEditingController();
+  static DateTime now= DateTime.now();
+  String formattedDate = DateFormat.yMMMEd().format(now);
 
   @override
   void initState(){
+    super.initState();
     _titleController.text= widget.title;
     _descriptionController.text= widget.desc;
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 8, 43, 72),
+      backgroundColor: widget.val==false? Colors.black:const Color.fromARGB(255, 8, 43, 72) ,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor:Color.fromARGB(255, 8, 43, 72),
+        backgroundColor: widget.val==false? Colors.black:const Color.fromARGB(255, 8, 43, 72) ,
          leading: IconButton(
           onPressed: ()=> Navigator.pop(context),
           icon: const  Icon(Icons.arrow_back,
@@ -50,7 +55,7 @@ class _Edit_ScreenState extends State<Edit_Screen> {
           child: Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.only(left:20.0, right: 20.0, top: 25.0),
+            margin: const EdgeInsets.only(left:20.0, right: 20.0, top: 25.0),
             child: Form(
             child: 
             Column(
@@ -78,10 +83,22 @@ class _Edit_ScreenState extends State<Edit_Screen> {
                     )
                   ),
               ),
-              const SizedBox(height: 20.0,),
+              const SizedBox(height: 10.0,),
+             Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        formattedDate,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                        ),
+                      ), 
+                    ],
+                  ),
+                const SizedBox(height: 10.0,),
                 TextField(
                   controller: _descriptionController,
-                  focusNode: myFocusNode,
                   textInputAction: TextInputAction.newline,
                   maxLines: null,
                   style: const TextStyle(
