@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:notes_app/controllers/notes_controller.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 class AddNotes extends StatefulWidget {
   final bool val;
@@ -11,12 +15,79 @@ class AddNotes extends StatefulWidget {
 }
 
 class _AddNotesState extends State<AddNotes> {
-
+   bool _speechEnabled = false;
+  String _lastWords = '';
+  Timer? _speechTimer;
   final TextEditingController _titleController=  TextEditingController();
   final TextEditingController _descriptionController= TextEditingController();
-
+  SpeechToText _speechToText = SpeechToText();
   static DateTime now = DateTime.now();
   String formattedDate = DateFormat.yMMMEd().format(now);
+
+  @override
+  void initState() {
+    super.initState();
+    _initSpeech();
+  }
+
+  /// This has to happen only once per app
+  void _initSpeech() async {
+    _speechEnabled = await _speechToText.initialize();
+    setState(() {});
+  }
+
+  /// Each time to start a speech recognition session
+  void _startListening() async {
+    if (await _speechToText.initialize()) {
+      _speechToText.listen(onResult: _onSpeechResult);
+      setState(() {
+        _speechEnabled = true;
+      });
+
+      // Start a timer to check for inactivity and stop speech recognition
+      _speechTimer = Timer(const Duration(seconds: 10), () {
+        _stopListening();
+      });
+    }
+  }
+
+  /// Manually stop the active speech recognition session
+  /// Note that there are also timeouts that each platform enforces
+  /// and the SpeechToText plugin supports setting timeouts on the
+  /// listen method.
+  void _stopListening() {
+    if (_speechToText.isListening) {
+      _speechToText.stop();
+    }
+    setState(() {
+      _speechEnabled = false;
+    });
+
+    // Cancel the timer when you manually stop speech recognition
+    _speechTimer?.cancel();
+  }
+
+  /// This is the callback that the SpeechToText plugin calls when
+  /// the platform returns recognized words.
+  void _onSpeechResult(SpeechRecognitionResult result) {
+    if (result.finalResult) {
+      setState(() {
+        String newText = result.recognizedWords;
+        String currentText = _descriptionController.text;
+        String updatedText = currentText +
+            ' ' +
+            newText; // Append recognized text to the existing text
+        _descriptionController.text = updatedText;
+        _lastWords = updatedText; // Update _lastWords for reference
+      });
+
+      // Reset the timer when speech recognition is active
+      _speechTimer?.cancel();
+      _speechTimer = Timer(const Duration(seconds: 10), () {
+        _stopListening();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +115,16 @@ class _AddNotesState extends State<AddNotes> {
           )
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          if(!_speechEnabled){
+            _startListening();
+          }
+          else{
+            _stopListening();
+          }
+        },
+      child: _speechEnabled? Icon(Icons.mic):Icon(Icons.mic_off)),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Container(

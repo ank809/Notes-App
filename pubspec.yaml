@@ -41,6 +41,7 @@ dependencies:
   firebase_core: ^2.15.1
   get: ^4.6.5
   intl: ^0.18.1
+  speech_to_text: ^6.3.0
 
 dev_dependencies:
   flutter_test:
