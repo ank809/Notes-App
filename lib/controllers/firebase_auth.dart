@@ -24,7 +24,7 @@ class Auth extends GetxController{
         collection('users').doc(userCredential.user!.uid)
         .set(myUser.toJson()).then((value) => 
         Get.snackbar('Congratulations😀', 'Your account has been created successfully'));
-        Get.offAll(HomePage());
+        Get.offAll(const HomePage());
       }
       else{
         Get.snackbar('Incomplete details', 'Fill all the fields');

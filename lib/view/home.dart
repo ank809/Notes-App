@@ -57,13 +57,11 @@ class _HomePageState extends State<HomePage> {
             if(snapshot.hasError){
               return Center(child: Text(('Error : ${snapshot.error}')));
             }
-
             final List<DocumentSnapshot> documents= snapshot.data!.docs;
             return GridView.builder(
               gridDelegate:  const SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 200,
                 crossAxisSpacing: 20,
-                //mainAxisSpacing:,
                 childAspectRatio: 1),
               itemCount: documents.length,
               itemBuilder: (context, index){
@@ -92,11 +90,11 @@ class _HomePageState extends State<HomePage> {
                     fontWeight: FontWeight.w800
                     ),),
                     subtitle: Text(
-                      item['desc'].length> 50
-                      ? item['desc'].substring(0, 45)+"..."
+                      item['desc'].length>35
+                      ? item['desc'].substring(0, 35)+"..."
                       :item['desc'],
                     style: const TextStyle(color: Colors.black,
-                    fontSize: 22.0),),
+                    fontSize: 20.0),),
                     onLongPress: () {
                       showDialog(
                         context: context,

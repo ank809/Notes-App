@@ -31,7 +31,7 @@ class NotesController{
     final user= FirebaseAuth.instance.currentUser;
     if(user!=null){
     return FirebaseFirestore.instance.collection('notes')
-    .where('uid' , isEqualTo: FirebaseAuth.instance.currentUser!.uid).snapshots();
+    .where('uid' , isEqualTo: user.uid).snapshots();
     }
     else{
       return Stream.empty();
